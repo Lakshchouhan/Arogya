@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symptoms - Arogya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5fbff;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .symptoms-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 120px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #555;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: #0048ff;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .symptoms-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border 0.3s;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group textarea:focus {
+            border-color: #0048ff;
+            outline: none;
+        }
+
+        .symptom-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .symptom-tag {
+            padding: 8px 16px;
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .symptom-tag:hover {
+            background-color: #e0e0e0;
+        }
+
+        .symptom-tag.selected {
+            background-color: #0048ff;
+            color: white;
+        }
+
+        .submit-btn {
+            padding: 12px;
+            background-color: #0048ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: #0035c9;
+        }
+
+        .alert {
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #e7f4e8;
+            color: #2d8636;
+            border: 1px solid #c9e6d1;
+        }
+
+        .alert-error {
+            background-color: #fbe7e9;
+            color: #d5394a;
+            border: 1px solid #f8ccd0;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="symptoms-container">
+        <div class="header">
+            <img src="/images/Screenshot 2025-04-23 014607 1.png" alt="Arogya Logo" class="logo">
+            <div class="nav-links">
+                <a href="main.html">Home</a>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <h1>Enter Your Symptoms</h1>
+        <div id="successAlert" class="alert alert-success"></div>
+        <div id="errorAlert" class="alert alert-error"></div>
+
+        <form id="symptomsForm" class="symptoms-form">
+            <div class="form-group">
+                <label for="symptoms">Describe your symptoms in detail</label>
+                <textarea id="symptoms" name="symptoms" placeholder="Please describe your symptoms, including when they started, their severity, and any other relevant details..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Common Symptoms (Click to select)</label>
+                <div class="symptom-tags">
+                    <span class="symptom-tag" onclick="toggleSymptom(this)">Fever</span>
+                    <span class="symptom-tag" onclick="toggleSymptom(this)">Cough</span>
+                    <span class="symptom-tag" onclick="toggleSymptom(this)">Headache</span>
+                    <span class="symptom-tag" onclick="toggleSymptom(this)">Fatigue</span>
+                    <span class="symptom-tag" onclick="toggleSymptom(this)">Body Pain</span>
+                    <span class="symptom-tag" onclick="toggleSymptom(this)">Nausea</span>
+                    <span class="symptom-tag" onclick="toggleSymptom(this)">Dizziness</span>
+                    <span class="symptom-tag" onclick="toggleSymptom(this)">Loss of Appetite</span>
+                    <span class="symptom-tag" onclick="toggleSymptom(this)">Shortness of Breath</span>
+                    <span class="symptom-tag" onclick="toggleSymptom(this)">Chest Pain</span>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Analyze Symptoms</button>
+        </form>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Toggle symptom selection
+        function toggleSymptom(element) {
+            element.classList.toggle('selected');
+        }
+
+        // Handle form submission
+        document.getElementById('symptomsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const symptoms = document.getElementById('symptoms').value;
+            const selectedSymptoms = Array.from(document.querySelectorAll('.symptom-tag.selected'))
+                .map(tag => tag.textContent);
+
+            const formData = {
+                description: symptoms,
+                selectedSymptoms: selectedSymptoms
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/symptoms', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to analyze symptoms');
+                }
+
+                document.getElementById('successAlert').style.display = 'block';
+                document.getElementById('successAlert').textContent = 'Symptoms recorded successfully! Analyzing...';
+                
+                // Redirect to results page after a short delay
+                setTimeout(() => {
+                    window.location.href = 'results.html';
+                }, 2000);
+            } catch (error) {
+                document.getElementById('errorAlert').style.display = 'block';
+                document.getElementById('errorAlert').textContent = error.message || 'Error recording symptoms. Please try again.';
+                
+                setTimeout(() => {
+                    document.getElementById('errorAlert').style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - Medical Diagnosis System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .container {
+            max-width: 1000px;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 20px;
+        }
+        .btn-primary {
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 600;
+        }
+        .alert {
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        .contact-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .severity-high {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .severity-medium {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        .severity-low {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center mb-0">Analysis Results</h2>
+            </div>
+            <div class="card-body">
+                <div id="loading" class="loading">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Analyzing your symptoms...</p>
+                </div>
+
+                <div id="errorAlert" class="alert alert-danger" style="display: none;">
+                    Error loading results. Please try again.
+                </div>
+
+                <div id="resultsContent" style="display: none;">
+                    <div class="section">
+                        <h3 class="section-title">Detected Condition</h3>
+                        <div id="condition" class="alert alert-info"></div>
+                    </div>
+
+                    <div class="section">
+                        <h3 class="section-title">Reported Symptoms</h3>
+                        <div id="symptoms" class="alert alert-secondary"></div>
+                    </div>
+
+                    <div class="section">
+                        <h3 class="section-title">AI Analysis</h3>
+                        <div id="aiAnalysis"></div>
+                    </div>
+
+                    <div class="section">
+                        <h3 class="section-title">Medical Contacts</h3>
+                        <div id="medicalContacts"></div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button id="downloadReport" class="btn btn-primary">Download Full Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Show loading state
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('errorAlert').style.display = 'none';
+        document.getElementById('resultsContent').style.display = 'none';
+
+        // Fetch results
+        async function fetchResults() {
+            try {
+                const response = await fetch('http://localhost:3000/api/analysis', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch results');
+                }
+
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('errorAlert').style.display = 'block';
+            }
+        }
+
+        // Display results
+        function displayResults(data) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('resultsContent').style.display = 'block';
+
+            // Display condition
+            const conditionElement = document.getElementById('condition');
+            if (data.aiAnalysis?.conditions?.length > 0) {
+                const condition = data.aiAnalysis.conditions[0];
+                conditionElement.innerHTML = `
+                    <strong>${condition.name}</strong> (${condition.confidence} confidence)<br>
+                    Severity: <span class="severity-${condition.severity.toLowerCase()}">${condition.severity}</span><br>
+                    ${condition.description}
+                `;
+            } else {
+                conditionElement.textContent = 'No specific condition detected';
+            }
+
+            // Display symptoms
+            document.getElementById('symptoms').textContent = data.matchedSymptoms;
+
+            // Display AI Analysis
+            const aiAnalysisElement = document.getElementById('aiAnalysis');
+            if (data.aiAnalysis) {
+                let analysisHtml = '';
+
+                // Immediate Actions
+                if (data.aiAnalysis.immediateActions?.length > 0) {
+                    analysisHtml += `
+                        <div class="mb-4">
+                            <h4>Immediate Actions</h4>
+                            <ul>
+                                ${data.aiAnalysis.immediateActions.map(action => `
+                                    <li>${action.action} <span class="badge bg-${getPriorityColor(action.priority)}">${action.priority}</span></li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                // Medications
+                if (data.aiAnalysis.medications?.length > 0) {
+                    analysisHtml += `
+                        <div class="mb-4">
+                            <h4>Recommended Medications</h4>
+                            <ul>
+                                ${data.aiAnalysis.medications.map(med => `
+                                    <li>
+                                        <strong>${med.name}</strong><br>
+                                        Dosage: ${med.dosage}<br>
+                                        Precautions: ${med.precautions}<br>
+                                        Prescription Required: ${med.prescriptionRequired ? 'Yes' : 'No'}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                // Lifestyle Recommendations
+                if (data.aiAnalysis.lifestyleRecommendations?.length > 0) {
+                    analysisHtml += `
+                        <div class="mb-4">
+                            <h4>Lifestyle Recommendations</h4>
+                            <ul>
+                                ${data.aiAnalysis.lifestyleRecommendations.map(rec => `
+                                    <li>${rec.recommendation} <span class="badge bg-${getImportanceColor(rec.importance)}">${rec.importance}</span></li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                // Emergency Indicators
+                if (data.aiAnalysis.emergencyIndicators?.length > 0) {
+                    analysisHtml += `
+                        <div class="mb-4">
+                            <h4>Emergency Indicators</h4>
+                            <ul>
+                                ${data.aiAnalysis.emergencyIndicators.map(indicator => `
+                                    <li>${indicator.indicator} <span class="badge bg-${getUrgencyColor(indicator.urgency)}">${indicator.urgency}</span></li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                // Follow-up Recommendations
+                if (data.aiAnalysis.followUpRecommendations?.length > 0) {
+                    analysisHtml += `
+                        <div class="mb-4">
+                            <h4>Follow-up Recommendations</h4>
+                            <ul>
+                                ${data.aiAnalysis.followUpRecommendations.map(rec => `
+                                    <li>${rec.action} (${rec.timeline})</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                aiAnalysisElement.innerHTML = analysisHtml;
+            }
+
+            // Display Medical Contacts
+            const contactsElement = document.getElementById('medicalContacts');
+            if (data.medicalContacts?.length > 0) {
+                contactsElement.innerHTML = data.medicalContacts.map(contact => `
+                    <div class="contact-card">
+                        <h5>${contact.name}</h5>
+                        <p class="mb-1">Type: ${contact.type}</p>
+                        <p class="mb-1">Phone: ${contact.phone}</p>
+                        <p class="mb-0">Address: ${contact.address}</p>
+                    </div>
+                `).join('');
+            }
+
+            // Add a button to view profile
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'text-center mt-4';
+            buttonContainer.innerHTML = `
+                <button onclick="window.location.href='profile.html'" class="btn btn-primary me-2">View Profile</button>
+                <button id="downloadReport" class="btn btn-outline-primary">Download Report</button>
+            `;
+            document.querySelector('.card-body').appendChild(buttonContainer);
+
+            // Set up download report button
+            document.getElementById('downloadReport').addEventListener('click', async () => {
+                try {
+                    const response = await fetch('http://localhost:3000/api/report', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to download report');
+                    }
+
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'medical-report.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } catch (error) {
+                    console.error('Error downloading report:', error);
+                    alert('Error downloading report. Please try again.');
+                }
+            });
+
+            // Redirect to profile page after 10 seconds
+            setTimeout(() => {
+                window.location.href = 'profile.html';
+            }, 10000);
+        }
+
+        // Helper functions for badge colors
+        function getPriorityColor(priority) {
+            switch (priority.toLowerCase()) {
+                case 'high': return 'danger';
+                case 'medium': return 'warning';
+                case 'low': return 'success';
+                default: return 'secondary';
+            }
+        }
+
+        function getImportanceColor(importance) {
+            switch (importance.toLowerCase()) {
+                case 'high': return 'danger';
+                case 'medium': return 'warning';
+                case 'low': return 'success';
+                default: return 'secondary';
+            }
+        }
+
+        function getUrgencyColor(urgency) {
+            switch (urgency.toLowerCase()) {
+                case 'immediate': return 'danger';
+                case 'severe': return 'warning';
+                case 'moderate': return 'success';
+                default: return 'secondary';
+            }
+        }
+
+        // Fetch results when page loads
+        fetchResults();
+    </script>
+</body>
+</html> 

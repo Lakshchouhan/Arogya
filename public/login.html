@@ -198,14 +198,14 @@
                         
                         // Show success message
                         loginAlert.style.display = 'block';
-                        loginAlert.textContent = 'Login successful! Redirecting to profile...';
+                        loginAlert.textContent = 'Login successful! Redirecting to dashboard...';
                         
                         // Reset the form
                         loginForm.reset();
                         
                         // Redirect after a short delay
                         setTimeout(() => {
-                            window.location.href = 'profile.html';
+                            window.location.href = 'dashboard.html';
                         }, 2000);
                     } else {
                         // Show error message
