@@ -12,6 +12,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// Root route
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/main.html');
+});
+
 // MongoDB Connection
 mongoose.connect('mongodb://localhost:27017/auth_db', {
     useNewUrlParser: true,
