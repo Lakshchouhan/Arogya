@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Arogya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5fbff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        .signup-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            width: 450px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            border-color: #0048ff;
+            outline: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #0048ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #0035c9;
+        }
+
+        .login-link {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .login-link a {
+            color: #0048ff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #555;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-link:hover {
+            color: #0048ff;
+        }
+
+        .back-icon {
+            margin-right: 5px;
+        }
+
+        .alert {
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #e7f4e8;
+            color: #2d8636;
+            border: 1px solid #c9e6d1;
+        }
+
+        .alert-error {
+            background-color: #fbe7e9;
+            color: #d5394a;
+            border: 1px solid #f8ccd0;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .terms-checkbox {
+            text-align: left;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .terms-checkbox input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .terms-checkbox label {
+            display: inline;
+            font-size: 14px;
+        }
+
+        .terms-checkbox a {
+            color: #0048ff;
+            text-decoration: none;
+        }
+
+        .terms-checkbox a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <a href="main.html" class="back-link">
+        <span class="back-icon">←</span> Back to Home
+    </a>
+
+    <div class="signup-container">
+        <img src="New folder\Screenshot 2025-04-23 014607 1.png" alt="Arogya Logo" class="logo">
+        <h1>Create your Arogya account</h1>
+        
+        <div id="signupAlert" class="alert alert-success"></div>
+        <div id="signupErrorAlert" class="alert alert-error"></div>
+        
+        <form id="signupForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required minlength="8">
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            
+            <div class="terms-checkbox">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+            </div>
+            
+            <button type="submit" class="btn">Create Account</button>
+        </form>
+        
+        <p class="login-link">Already have an account? <a href="login.html">Log in</a></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const signupForm = document.getElementById('signupForm');
+            const signupAlert = document.getElementById('signupAlert');
+            const signupErrorAlert = document.getElementById('signupErrorAlert');
+            
+            signupForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                // Validation
+                if (password !== confirmPassword) {
+                    signupErrorAlert.style.display = 'block';
+                    signupErrorAlert.textContent = 'Passwords do not match';
+                    return;
+                }
+
+                if (password.length < 8) {
+                    signupErrorAlert.style.display = 'block';
+                    signupErrorAlert.textContent = 'Password must be at least 8 characters long';
+                    return;
+                }
+
+                try {
+                    const response = await fetch('http://localhost:3000/api/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            username: `${firstName} ${lastName}`,
+                            email,
+                            password
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        // Store the token
+                        localStorage.setItem('token', data.token);
+                        
+                        // Show success message
+                        signupAlert.style.display = 'block';
+                        signupAlert.textContent = 'Account created successfully! Redirecting to login...';
+                        
+                        // Reset the form
+                        signupForm.reset();
+                        
+                        // Redirect after a short delay
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 2000);
+                    } else {
+                        // Show error message
+                        signupErrorAlert.style.display = 'block';
+                        signupErrorAlert.textContent = data.message || 'Error creating account. Please try again.';
+                        
+                        // Hide the error message after 3 seconds
+                        setTimeout(() => {
+                            signupErrorAlert.style.display = 'none';
+                        }, 3000);
+                    }
+                } catch (error) {
+                    signupErrorAlert.style.display = 'block';
+                    signupErrorAlert.textContent = 'An error occurred. Please try again later.';
+                    
+                    setTimeout(() => {
+                        signupErrorAlert.style.display = 'none';
+                    }, 3000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

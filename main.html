@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arogya - AI-Powered Disease Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            width: 120px;
+        }
+
+        .logo img {
+            width: 100%;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin-right: 20px;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #0048ff;
+        }
+
+        .nav-buttons {
+            display: flex;
+        }
+
+        .login-btn, .signup-btn {
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-left: 10px;
+            border: none;
+        }
+
+        .login-btn {
+            background-color: #0048ff;
+            color: white;
+        }
+
+        .signup-btn {
+            background-color: #ff3a3a;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-color: #f5fbff;
+            padding: 60px 0;
+            position: relative;
+        }
+
+        .hero-headline {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .hero-headline h1 {
+            font-size: 38px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .hero-headline span {
+            color: #0048ff;
+        }
+
+        .hero-content-wrapper {
+            display: flex;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-image-container {
+            position: relative;
+            flex: 1;
+            min-height: 400px;
+            padding-top: 40px;
+        }
+
+        .doctor-phone-image {
+            position: relative;
+            z-index: 2;
+            width: 380px;
+            margin: 0 auto;
+        }
+
+        .doctor-phone-image img {
+            width: 100%;
+            height: auto;
+        }
+
+        .floating-icon {
+            position: absolute;
+            z-index: 3;
+            width: 80px;
+            height: 80px;
+        }
+
+        .icon-top-left {
+            top: 40px;
+            left: 40px;
+        }
+
+        .icon-bottom-left {
+            bottom: 40px;
+            left: 80px;
+        }
+
+        .icon-top-right {
+            top: 40px;
+            right: 40px;
+        }
+
+        .icon-bottom-right {
+            bottom: 40px;
+            right: 80px;
+        }
+
+        .hero-text-container {
+            flex: 1;
+            padding-left: 40px;
+        }
+
+        .hero-text-container h2 {
+            font-size: 32px;
+            color: #664d39;
+            line-height: 1.5;
+            font-weight: 500;
+            /* margin-bottom: 80px; */
+        }
+
+        .hero-button-container {
+            text-align: center;
+        }
+
+        .get-started-btn {
+            background-color: #0048ff;
+            color: white;
+            padding: 15px 50px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 0 auto;
+        }
+
+        .get-started-btn:hover {
+            background-color: #0035c9;
+        }
+
+        /* Why Choose Section */
+        .why-choose {
+            padding: 70px 0;
+        }
+
+        .why-choose-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .why-choose-text {
+            flex: 1;
+            padding-right: 40px;
+        }
+
+        .why-choose-text h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .why-choose-text p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .why-choose-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .why-choose-image img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Expertise Section */
+        .expertise-section {
+            padding: 70px 0;
+            background-color: #f9f9f9;
+        }
+
+        .section-heading {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #0048ff;
+        }
+
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .expertise-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .expertise-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .expertise-icon {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 20px;
+        }
+
+        .expertise-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #0048ff;
+        }
+
+        .expertise-card p {
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 50px 0 20px;
+        }
+
+        .footer-top {
+            display: flex;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            flex: 1;
+        }
+
+        .footer-logo img {
+            width: 120px;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo p {
+            color: #ccc;
+            font-size: 14px;
+            max-width: 400px;
+        }
+
+        .footer-links {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer-column h4 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: #0048ff;
+        }
+
+        .whatsapp-contact {
+            display: flex;
+            align-items: center;
+            color: #ccc;
+        }
+
+        .whatsapp-contact img {
+            width: 16px;
+            height: 16px;
+            margin-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #555;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        @media (max-width: 992px) {
+            .hero-content-wrapper {
+                flex-direction: column;
+            }
+            
+            .hero-image-container {
+                margin-bottom: 40px;
+            }
+            
+            .hero-text-container {
+                padding-left: 0;
+                text-align: center;
+            }
+            
+            .icon-top-left {
+                top: 10px;
+                left: 10px;
+            }
+
+            .icon-bottom-left {
+                bottom: 10px;
+                left: 30px;
+            }
+
+            .icon-top-right {
+                top: 10px;
+                right: 10px;
+            }
+
+            .icon-bottom-right {
+                bottom: 10px;
+                right: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-headline h1 {
+                font-size: 30px;
+            }
+            
+            .hero-text-container h2 {
+                font-size: 22px;
+            }
+            
+            .doctor-phone-image {
+                width: 320px;
+            }
+            
+            .floating-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .why-choose-container {
+                flex-direction: column;
+            }
+            
+            .why-choose-text {
+                padding-right: 0;
+                margin-bottom: 30px;
+            }
+            
+            .expertise-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-top {
+                flex-direction: column;
+            }
+            
+            .footer-logo {
+                margin-bottom: 30px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+            }
+            
+            .footer-column {
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo">
+                <img src="New folder\Screenshot 2025-04-23 014607 1.png" alt="Arogya Logo">
+            </div>
+            <nav class="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Expertise</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Contact us</a></li>
+                    <li><a href="#">Follow</a></li>
+                </ul>
+                <div class="nav-buttons">
+                    <a href="login.html"><button class="login-btn">Login</button></a>
+                    <a href="signup.html"><button class="signup-btn">Signup</button></a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <!-- Main headline at the top -->
+            <div class="hero-headline">
+                <h1>"Detecting Diseases Early, <span>Saving Lives Faster</span>"</h1>
+            </div>
+            
+            <!-- Two-column layout for content -->
+            <div class="hero-content-wrapper">
+                <!-- Left column with doctor image and floating icons -->
+                <div class="hero-image-container">
+                  <img src="New folder\Picsart_25-05-18_23-31-02-214.png" alt="Medical Syringe Icon">
+                    <!-- Floating icon - top left -->
+                    <div class="floating-icon icon-top-left">
+                        <!-- <img src="/api/placeholder/80/80" alt="Medical Syringe Icon"> -->
+                    </div>
+                    
+                    <!-- Main doctor image -->
+                    <div class="doctor-phone-image">
+                        <!-- <img src="/api/placeholder/380/380" alt="Doctor on Phone Screen"> -->
+                    </div>
+                    
+                    <!-- Floating icon - bottom left -->
+                    <div class="floating-icon icon-bottom-left">
+                        <!-- <img src="/api/placeholder/80/80" alt="Stethoscope Icon"> -->
+                    </div>
+                    
+                    <!-- Floating icon - top right -->
+                    <div class="floating-icon icon-top-right">
+                        <!-- <img src="/api/placeholder/80/80" alt="Medicine Icon"> -->
+                    </div>
+                    
+                    <!-- Floating icon - bottom right -->
+                    <div class="floating-icon icon-bottom-right">
+                        <!-- <img src="/api/placeholder/80/80" alt="First Aid Kit Icon"> -->
+                    </div>
+                </div>
+                
+                <!-- Right column with subtitle text -->
+                <div class="hero-text-container">
+                    <h2>"Leveraging AI and Telemedicine to Detect Tuberculosis, Malaria, and More — Early, Accurately, and Remotely."</h2>
+                </div>
+            </div>
+            
+            <!-- Get Started button centered below -->
+            <div class="hero-button-container">
+                <button class="get-started-btn">Get Started</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Section -->
+    <section class="why-choose">
+        <div class="container why-choose-container">
+            <div class="why-choose-text">
+                <h2>Why to choose Arogya?</h2>
+                <p>Arogya offers cutting-edge, AI-powered diagnostic tools designed to improve healthcare access in rural areas. Our system accurately detects diseases like tuberculosis and malaria using mobile devices, making early diagnosis more accessible.</p>
+                <p>With telemedicine integration, healthcare professionals can remotely assess patient data, enabling timely and effective treatment. Arogya prioritizes simplicity, security, and accuracy, ensuring that even regions with limited infrastructure can benefit from advanced healthcare solutions.</p>
+            </div>
+            <div class="why-choose-image">
+                <img src="New folder\Benefits-of-Telemedicine-in-rural-areas-(Blog)_(1)_POST_1601038145 1.png" alt="Telemedicine Consultation">
+            </div>
+        </div>
+    </section>
+
+    <!-- Expertise Section -->
+    <section class="expertise-section">
+        <div class="container">
+            <h2 class="section-heading">Our Expertise</h2>
+            <div class="expertise-grid">
+                <!-- Expertise Card 1 -->
+                <div class="expertise-card">
+                    <img src="New folder\9821795 2.png" alt="Disease Detection Icon" class="expertise-icon">
+                    <h3>Disease Detection Capabilities</h3>
+                    <p>Our AI models continuously improve with new data, ensuring accurate and timely diagnosis of critical diseases.</p>
+                </div>
+                
+                <!-- Expertise Card 2 -->
+                <div class="expertise-card">
+                    <img src="New folder\8037633 1.png" alt="Medical Imaging Icon" class="expertise-icon">
+                    <h3>Medical Imaging Expertise</h3>
+                    <p>By harnessing advanced imaging techniques, we simplify disease detection for frontline healthcare workers.</p>
+                </div>
+                
+                <!-- Expertise Card 3 -->
+                <div class="expertise-card">
+                    <img src="New folder\1629464278987 1.png" alt="Telemedicine Icon" class="expertise-icon">
+                    <h3>Telemedicine Integration</h3>
+                    <p>Telemedicine ensures that healthcare expertise is accessible to even the most underserved communities.</p>
+                </div>
+                
+                <!-- Expertise Card 4 -->
+                <div class="expertise-card">
+                    <img src="New folder\4850933 3.png" alt="Preventive Healthcare Icon" class="expertise-icon">
+                    <h3>Preventive Healthcare Focus</h3>
+                    <p>Preventive care saves lives by reducing the burden on healthcare systems and improving patient outcomes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-logo">
+                    <img src="New folder\Screenshot 2025-04-23 014607 1.png" alt="Arogya Logo">
+                    <p>Arogya offers cutting-edge, AI-powered diagnostic tools designed to improve healthcare access in rural areas. Our system accurately detects diseases like tuberculosis and malaria using mobile devices, making early diagnosis more accessible.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Our Services</h4>
+                        <ul>
+                            <li><a href="#">AI-Powered Disease Detection</a></li>
+                            <li><a href="#">Telemedicine Diagnostics</a></li>
+                            <li><a href="#">Medical Image Analysis</a></li>
+                            <li><a href="#">Customized AI Solutions for Clinics</a></li>
+                            <li><a href="#">Healthcare Data Insights</a></li>
+                            <li><a href="#">Remote Patient Monitoring</a></li>
+                            <li><a href="#">Community Health Surveillance</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Contact us</h4>
+                        <ul>
+                            <li><a href="#">Post A Query</a></li>
+                            <li><a href="#">Consult Doctors Online</a></li>
+                            <li><a href="#">Book Physical Appointment</a></li>
+                            <li><a href="#">Give Your Feedback</a></li>
+                            <li><a href="#">Chat with us on WhatsApp</a></li>
+                            <li class="whatsapp-contact">General helpline : 0120 893 7272 <img src="/api/placeholder/16/16" alt="WhatsApp Icon"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Arogya. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- <script>
+        // Simple JavaScript for interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get Started button click event
+            const getStartedBtn = document.querySelector('.get-started-btn');
+            if (getStartedBtn) {
+                getStartedBtn.addEventListener('click', function() {
+                    alert('Thank you for your interest in Arogya! Our team will contact you shortly.');
+                });
+            }
+
+            // Navigation buttons click events
+            const loginBtn = document.querySelector('.login-btn');
+            const signupBtn = document.querySelector('.signup-btn');
+            
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function() {
+                    alert('Login functionality will be available soon!');
+                });
+            }
+            
+            if (signupBtn) {
+                signupBtn.addEventListener('click', function() {
+                    alert('Sign up functionality will be available soon!');
+                });
+            }
+
+            // Smooth scrolling for navigation links
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Get the target section from href attribute
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    
+                    if (targetSection) {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        alert('This section is coming soon!');
+                    }
+                });
+            });
+        });
+    </script> -->
+</body>
+</html>
